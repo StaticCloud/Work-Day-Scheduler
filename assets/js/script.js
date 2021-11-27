@@ -9,21 +9,22 @@ var loadPage = function() {
     // load our 9-5 clock using moment().hours() and formatting that to a 12 hour clock
     for (var i = 9; i < 18; i++) {
         // get the nth hour starting from 9am to 5pm
-        var hour = moment().hours(i).format("h a");
+        var hour = moment().hours(i).format("h a").toUpperCase();
     
         // create time blocks, which include the hour, the textarea, and a save button
         var timeblockEl = $("<div>")
-            .addClass("time-block")
-            .addClass("row");
+            .addClass("time-block row")
 
         var hourEl = $("<p>")
-            .addClass("hour")
+            .addClass("hour text-right col pt-3")
             .html(hour);
 
-        var textareaEl = $("<textarea>");
+        var textareaEl = $("<textarea>")
+            .addClass("col-10 past");
 
         var savebtnEl = $("<button>")
-            .addClass("saveBtn");
+            .addClass("saveBtn col")
+            .html("<i class=\"bi bi-archive\"></i>");
 
         // append our elements to the page
         timeblockEl.append(hourEl);
