@@ -1,4 +1,5 @@
 var currentIndex;
+var schedule = [];
 
 // load our page
 var loadPage = function() {
@@ -104,9 +105,60 @@ var assessHour = function() {
     }
 }
 
+// function for saving our schedule
+var saveSchedule = function() {
+    // clear our schedule
+    schedule = [];
+
+    // then reappend our new time blocks
+    $(".container").children().each(function() {
+        var hour = $(this).find(".hour").text();
+        var text = $(this).find("textarea").val();
+        var block = [hour, text];
+
+        schedule.push(block);
+    })
+
+    // then update localStorage
+    localStorage.setItem("schedule", JSON.stringify(schedule));
+}
+
+// function for loading our schedule
+var loadSchedule = function() {
+    // get our schedule from localStorage
+    schedule = localStorage.getItem("schedule");
+
+    // create a new schedule array if it is null
+    if (schedule == null) {
+        schedule = [];
+        return false;
+    }
+
+    // parse the string
+    schedule = JSON.parse(schedule);
+
+    // iterate through our container
+    $(".container").children().each(function() {
+        for (var i = 0; i < schedule.length; i++) {
+            // get the hour value of each block
+            var hour = $(this).find(".hour").text();
+
+            // if it's equal to one of our times in our schedule, set it's textarea to whatever it's value pair
+            if (hour === schedule[i][0]) {
+                $(this).find("textarea").text(schedule[i][1]);
+            }
+        }
+    })
+}
+
+// save our schedule on click
+$(".container").on("click", "button", saveSchedule);
+
+// assess our hour every 10 seconds
 setInterval(function() {
     assessHour();
 }, 10000);
 
 loadPage();
+loadSchedule();
 assessHour();
