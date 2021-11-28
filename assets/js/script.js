@@ -1,5 +1,8 @@
+var currentIndex;
+
 // load our page
 var loadPage = function() {
+    $(".container").empty();
 
     // get the current day element and set it's inner html to the current day and month
     $("#currentDay")
@@ -34,4 +37,76 @@ var loadPage = function() {
     }
 }
 
+// evaluate the current hour, called in our interval every 10 seconds
+var assessHour = function() {
+    // get the current hour and the period using moment()
+    var currentTime = moment().format("h A");
+
+    // calling removeClass and addClass to make sure there is one and only one time class for each block
+    $(".container").children().each(function() {
+        // get the text content of the hour element
+        var hour = $(this)
+            .find(".hour")
+            .text();
+        
+        // if the hour and the current hour are equal style it and get it's index
+        if (hour === currentTime) {
+            // if the current hour obtained from moment() equals one of the hours in our blocks, set that block to the present block...
+            $(this)
+                .find("textarea")
+                .removeClass("past")
+                .removeClass("future")
+                .addClass("present");
+    
+                var currentBlock = $(this).find("textarea").hasClass("present");
+    
+                // ...and get it's index
+                if (currentBlock) {
+                    currentIndex = $(this).index();
+                }
+        } else {
+            // ..otherwise, set all other blocks to past
+            $(this)
+                .find("textarea")
+                .addClass("past")
+                .removeClass("present")
+                .removeClass("future");
+        }
+    
+        // ...set all future blocks to ...future...
+        if ($(this).index() > currentIndex) {
+            $(this)
+                .find("textarea")
+                .removeClass("past")
+                .removeClass("present")
+                .addClass("future");
+        // ...if a block is less than the current index, set that to the past block
+        } else if ($(this).index() < currentIndex) {
+            $(this)
+                .find("textarea")
+                .removeClass("future")
+                .removeClass("present")
+                .addClass("past");
+        }
+        
+    })
+
+    if ((currentTime.split(" ")[0] > 5 && currentTime.split(" ")[0] != 12) && currentTime.split(" ")[1] === "PM") {
+        $(".container")
+            .find("textarea")
+            .addClass("past");
+    }
+
+    if ((currentTime.split(" ")[0] < 9 || currentTime.split(" ")[0] == 12) && currentTime.split(" ")[1] === "AM") {
+        $(".container")
+            .find("textarea")
+            .addClass("future");
+    }
+}
+
+setInterval(function() {
+    assessHour();
+}, 10000);
+
 loadPage();
+assessHour();
