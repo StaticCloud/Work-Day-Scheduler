@@ -5,11 +5,6 @@ var schedule = [];
 var loadPage = function() {
     $(".container").empty();
 
-    // get the current day element and set it's inner html to the current day and month
-    $("#currentDay")
-        .html("<i>" + 
-        moment().format("dddd, MMMM Do") + "</i>");
-
     // load our 9-5 clock using moment().hours() and formatting that to a 12 hour clock
     for (var i = 9; i < 18; i++) {
         // get the nth hour starting from 9am to 5pm
@@ -42,6 +37,11 @@ var loadPage = function() {
 var assessHour = function() {
     // get the current hour and the period using moment()
     var currentTime = moment().format("h A");
+
+    // get the current day element and set it's inner html to the current day and month
+    $("#currentDay")
+        .html("<i>" + 
+        moment().format("dddd, MMMM Do") + "</i>");
 
     // calling removeClass and addClass to make sure there is one and only one time class for each block
     $(".container").children().each(function() {
