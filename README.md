@@ -7,3 +7,9 @@ An online work-day schedule planner. Includes a text input for each hour of the 
 
 ## Links
 [Deployed Page](https://staticcloud.github.io/super-disco/)
+
+## Overview
+
+Here's an overview of the application!
+
+![overview](./assets/WDSOverview.png)
